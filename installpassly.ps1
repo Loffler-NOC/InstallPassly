@@ -33,7 +33,7 @@ catch {
 
 #Install Passly
 try {
-    msiexec /x C:\temp\PasslyWinLogonCP.msi /qn
+    msiexec /i C:\temp\PasslyWinLogonCP.msi /qn
 }
 catch {
     Write-Output "Passly failed to install with error: " $_
