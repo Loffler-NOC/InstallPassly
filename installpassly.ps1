@@ -18,12 +18,11 @@ if ($installed -ne $null) {
     }
 }
 
+$PasslyPath = ".\PasslyWinLogonCP.msi"
+
 #Download the Passly installer
 try {
-    if (-not (Test-Path -Path "C:\Software" -PathType Container)) {
-    New-Item -Path "C:\Software" -ItemType Directory
-    }
-    Invoke-WebRequest -Uri https://passlyprodwuappsa.blob.core.windows.net/files/PasslyWinLogonCP.msi -Outfile C:\Software\PasslyWinLogonCP.msi
+    Invoke-WebRequest -Uri https://passlyprodwuappsa.blob.core.windows.net/files/PasslyWinLogonCP.msi -Outfile $PasslyPath
 }
 catch {
     Write-Output "Passly was not able to be downloaded. Please check that the device is able to reach https://passlyprodwuappsa.blob.core.windows.net/files/PasslyWinLogonCP.msi . Full error message:"
@@ -33,7 +32,7 @@ catch {
 
 #Install Passly
 try {
-    Start-Process C:\Windows\System32\msiexec.exe -ArgumentList "/i C:\temp\PasslyWinLogonCP.msi /qn" -wait
+    Start-Process C:\Windows\System32\msiexec.exe -ArgumentList "/i $PasslyPath /qn" -wait
 }
 catch {
     Write-Output "Passly failed to install with error: " $_
@@ -42,10 +41,10 @@ catch {
 
 #Clean up the Passly installer
 try {
-    Remove-Item -Path "C:\Software\PasslyWinLogonCP.msi"
+    Remove-Item -Path $PasslyPath
 }
 catch {
-    Write-Output "Could not clean up installer. Please check C:\Software\PasslyWinLogonCP.msi and see if it was removed. Full error message:"
+    Write-Output "Could not clean up installer. Please check $PasslyPath and see if it was removed. Full error message:"
     Write-Output $_
     exit 1
 }
